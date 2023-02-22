@@ -1,6 +1,9 @@
 {
   "name": "korona-smt-report",
   "private": true,
+  "engines": {
+    "node": "18.12.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
