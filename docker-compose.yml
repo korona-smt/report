@@ -12,6 +12,7 @@ services:
       - "3000:3000"
     tty: true
     environment:
+      - WATCHPACK_POLLING=true
       - NODE_ENV=development
       - TZ=Asia/Tokyo
 

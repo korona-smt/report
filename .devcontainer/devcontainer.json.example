@@ -1,0 +1,11 @@
+{
+  "name": "Node.js App",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "node",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+        "extensions": []
+    }
+  }
+}
