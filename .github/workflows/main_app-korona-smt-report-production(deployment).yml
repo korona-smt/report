@@ -58,8 +58,9 @@ jobs:
       - name: archive
         run: |
           cp -r ./.next/standalone /tmp/app
-          cp -r ./public /tmp/app/public
           cp -r ./.next/static /tmp/app/.next/static
+          cp -r ./public /tmp/app/public
+          cp -r ./resources /tmp/app/resources
           cd /tmp/app
           zip -r /tmp/app.zip ./
 

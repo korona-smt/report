@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import { styled } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
@@ -8,6 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import Link from '../../atoms/link';
 
 type Props = {
@@ -54,7 +55,7 @@ type MainListItemsProps = {
   current: string;
 }
 
-const MainListItems = ({ current }: MainListItemsProps) => (
+const MainListItems: FC<MainListItemsProps> = ({ current }: MainListItemsProps) => (
   <Fragment>
     <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
       <ListItemButton selected={current == 'dashboard'}>
@@ -62,6 +63,14 @@ const MainListItems = ({ current }: MainListItemsProps) => (
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="ダッシュボード" />
+      </ListItemButton>
+    </Link>
+    <Link href="/chakuken/torihikisaki-shiharai" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <ListItemButton selected={current == 'chakuken-torihikisaki-shiharai'}>
+        <ListItemIcon>
+          <SummarizeIcon />
+        </ListItemIcon>
+        <ListItemText primary="着券取引支払先" />
       </ListItemButton>
     </Link>
   </Fragment>
