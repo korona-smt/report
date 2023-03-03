@@ -60,6 +60,17 @@ async function fetchContents(): Promise<Contents> {
     });
 }
 
+async function fetchCreateReport(values: Values): Promise<PostTorishikisakiShiharaiResponseData> {
+  return fetch('/api/chakuken/torihikisaki-shiharai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values),
+      })
+      .then(data => data.json());
+}
+
 type ServerSideProps = {
   institutions: Institution[];
 };
@@ -155,23 +166,27 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   />));
 
   const [downloading, setDownloading] = useState<boolean>(false);
+  const [donwloadFile, setDonwloadFile] = useState<string>();
   const handlerDownload = async () => {
     setDownloading(true);
-    await fetch('/api/chakuken/torihikisaki-shiharai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formValues),
+    await fetchCreateReport(formValues)
+      .then((data: PostTorishikisakiShiharaiResponseData) => {
+        setDonwloadFile(data.filename);
       })
-      .then(data => data.json())
-      .then((data: PostTorishikisakiShiharaiResponseData) => window.open('/chakuken/torihikisaki-shiharai/download?filename=' + data.filename))
       .catch((response) => {
         console.log('download error', response);
+        setDownloading(false);
         alert('エラーが発生しました。');
       });
-    setDownloading(false);
   }
+
+  useEffect(() => {
+    if (!!donwloadFile) {
+      // 非同期通信後にwindow.openするとポップアップブロックされるため、処理を分ける
+      window.open('/chakuken/torihikisaki-shiharai/download?filename=' + donwloadFile ,'_blank');
+      setDownloading(false);
+    }
+  }, [donwloadFile]);
 
   return (
     <Layout title="着券取引支払先" current="chakuken-torihikisaki-shiharai">
