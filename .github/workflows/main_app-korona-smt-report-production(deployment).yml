@@ -33,7 +33,7 @@ jobs:
         run: npm run lint --if-present
 
       - name: test
-        run: npm run test --if-present
+        run: npm run test:ci --if-present
 
   packing:
     runs-on: ubuntu-latest
