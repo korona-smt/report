@@ -2,7 +2,7 @@ import MuiStepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-type Props = {
+export type Props = {
   labels: string[];
   activeStep: number;
 }
