@@ -6,7 +6,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Drawer from './drawer';
+import Drawer, { Props as DrawerProps } from './drawer';
 
 const drawerWidth: number = 240;
 
@@ -25,8 +25,7 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme }) => ({
 type Props = {
   children: ReactNode;
   title: string;
-  current: string;
-}
+} & Pick<DrawerProps, 'current'>;
 
 export default function Layout({ children, title, current }: Props) {
   return (

@@ -11,9 +11,9 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Link from '../../atoms/link';
 
-type Props = {
+export type Props = {
   width: number;
-  current: string;
+  current: MenuItem;
 }
 
 export default function Drawer({ width, current }: Props) {
@@ -51,13 +51,16 @@ export default function Drawer({ width, current }: Props) {
   );
 }
 
+const menuItems = ['dashboard', 'chakuken-torihikisaki-shiharai'] as const;
+type MenuItem = typeof menuItems[number];
 type MainListItemsProps = {
-  current: string;
+  current: MenuItem;
 }
+const linkStyle = { textDecoration: 'none', color: 'inherit' };
 
 const MainListItems: FC<MainListItemsProps> = ({ current }: MainListItemsProps) => (
   <Fragment>
-    <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link href="/" style={linkStyle}>
       <ListItemButton selected={current == 'dashboard'}>
         <ListItemIcon>
           <DashboardIcon />
@@ -65,7 +68,7 @@ const MainListItems: FC<MainListItemsProps> = ({ current }: MainListItemsProps) 
         <ListItemText primary="ダッシュボード" />
       </ListItemButton>
     </Link>
-    <Link href="/chakuken/torihikisaki-shiharai" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link href="/chakuken/torihikisaki-shiharai" style={linkStyle}>
       <ListItemButton selected={current == 'chakuken-torihikisaki-shiharai'}>
         <ListItemIcon>
           <SummarizeIcon />
