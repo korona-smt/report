@@ -15,13 +15,13 @@ import { AggregateType, isAggregateType } from '../../../../../domain/chakukenTo
 import { SelectDateRangeFormValues } from '../../../../../pages/chakuken/torihikisaki-shiharai';
 
 type Types = Map<AggregateType, string>;
-type Props = {
+export type SelectDateRangeFormProps = {
   reportTypes: Types;
   values: SelectDateRangeFormValues;
   onChangeValues: (values: SelectDateRangeFormValues) => void;
 }
 
-export default function SelectDateRangeForm({ reportTypes, values, onChangeValues }: Props) {
+export default function SelectDateRangeForm({ reportTypes, values, onChangeValues }: SelectDateRangeFormProps) {
   const handleTypeChange = (_e: ChangeEvent<HTMLInputElement>, newValue: string) => {
     if (isAggregateType(newValue)) {
       onChangeValues({ ...values, type: newValue });
@@ -46,11 +46,11 @@ export default function SelectDateRangeForm({ reportTypes, values, onChangeValue
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={6}>
-          <FormControl>
-            <FormLabel id="date-range-type">区分</FormLabel>
+          <FormControl data-testid={'field-aggregate-type'}>
+            <FormLabel id="aggregate-type">区分</FormLabel>
             <RadioGroup
-              aria-labelledby="date-range-type"
-              name="date-range-type"
+              aria-labelledby="aggregate-type"
+              name="aggregate-type"
               value={values.type}
               onChange={handleTypeChange}
             >
