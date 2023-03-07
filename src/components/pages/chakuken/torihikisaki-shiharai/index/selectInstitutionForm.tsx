@@ -1,15 +1,14 @@
 import { Fragment } from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { Institutions, InstitutionCode } from '../../../../../domain/institution';
+import MultipleSelect, { MultipleSelectChangeEvent } from '../../../../../components/atoms/multipleSelect';
+import { Institutions } from '../../../../../domain/institution';
 import { SelectInstitutionFormValues } from '../../../../../pages/chakuken/torihikisaki-shiharai';
 
 const ITEM_HEIGHT = 48;
@@ -23,15 +22,6 @@ const MenuProps = {
   },
 };
 
-function getStyles(item: InstitutionCode, selected: InstitutionCode[], theme: Theme) {
-  return {
-    fontWeight:
-      selected.indexOf(item) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 type Props = {
   institutions: Institutions;
   values: SelectInstitutionFormValues;
@@ -41,13 +31,23 @@ type Props = {
 export default function SelectInstitutionForm({ institutions, values, onChangeValues }: Props) {
   const theme = useTheme();
 
-  const handleChange = (event: SelectChangeEvent<typeof values.institutions>) => {
+  type InstitutionsValues = typeof values.institutions;
+  const handleChange = (event: MultipleSelectChangeEvent<InstitutionsValues>) => {
     const {
       target: { value },
     } = event;
+
+    // On autofill we get a stringified value.
     const selected = typeof value === 'string' ? value.split(',') : value;
+
     onChangeValues({...values, institutions: selected});
   };
+
+  const items = Array.from(institutions).map(([_code, institution]) => ({
+    value: institution.code,
+    label: `${institution.code}： ${institution.name}`,
+    selected: values.institutions.includes(institution.code),
+  }));
 
   return (
     <Fragment>
@@ -61,26 +61,17 @@ export default function SelectInstitutionForm({ institutions, values, onChangeVa
             <Button variant='outlined' onClick={() => onChangeValues({...values, institutions: []})}>選択解除</Button>
           </Stack>
           <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="select-institution-label">店舗</InputLabel>
-            <Select
-              labelId='select-institution-label'
-              id='select-institution'
-              multiple
+            <InputLabel id="select-institutions-label">店舗</InputLabel>
+            <MultipleSelect<InstitutionsValues>
+              labelId='select-institutions-label'
+              id='select-institutions'
               value={values.institutions}
               onChange={handleChange}
               input={<OutlinedInput label="店舗" />}
               MenuProps={MenuProps}
-            >
-              {Array.from(institutions).map(([_code, institution]) => (
-                <MenuItem
-                  key={institution.code}
-                  value={institution.code}
-                  style={getStyles(institution.code, values.institutions, theme)}
-                >
-                  {`${institution.code}： ${institution.name}`}
-                </MenuItem>
-              ))}
-            </Select>
+              items={items}
+              theme={theme}
+            />
           </FormControl>
         </Grid>
       </Grid>

@@ -1,15 +1,14 @@
 import { Fragment } from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { ContentCode, Contents } from '../../../../../domain/content';
+import MultipleSelect, { MultipleSelectChangeEvent } from '../../../../../components/atoms/multipleSelect';
+import { Contents } from '../../../../../domain/content';
 import { SelectContentFormValues } from '../../../../../pages/chakuken/torihikisaki-shiharai';
 
 const ITEM_HEIGHT = 48;
@@ -23,15 +22,6 @@ const MenuProps = {
   },
 };
 
-function getStyles(code: ContentCode, selectedContent: ContentCode[], theme: Theme) {
-  return {
-    fontWeight:
-      selectedContent.indexOf(code) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 type Props = {
   contents: Contents;
   values: SelectContentFormValues;
@@ -41,15 +31,23 @@ type Props = {
 export default function SelectContentForm({ contents, values, onChangeValues }: Props) {
   const theme = useTheme();
 
-  const handleChange = (event: SelectChangeEvent<typeof values.contents>) => {
+  type ContentsValues = typeof values.contents;
+  const handleChange = (event: MultipleSelectChangeEvent<ContentsValues>) => {
     const {
       target: { value },
     } = event;
 
     // On autofill we get a stringified value.
     const selected = typeof value === 'string' ? value.split(',') : value;
+
     onChangeValues({...values, contents: selected});
   };
+
+  const items = Array.from(contents).map(([_code, content]) => ({
+    value: content.code,
+    label: `${content.code}： ${content.name}`,
+    selected: values.contents.includes(content.code),
+  }));
 
   return (
     <Fragment>
@@ -63,26 +61,17 @@ export default function SelectContentForm({ contents, values, onChangeValues }: 
             <Button variant='outlined' onClick={() => onChangeValues({...values, contents: []})}>選択解除</Button>
           </Stack>
           <FormControl sx={{ m: 1, width: 300 }}>
-            <InputLabel id="select-contnet-label">作品</InputLabel>
-            <Select
-              labelId='select-contnet-label'
-              id='select-contnet'
-              multiple
+            <InputLabel id="select-contnets-label">作品</InputLabel>
+            <MultipleSelect<ContentsValues>
+              labelId='select-contnets-label'
+              id='select-contnets'
               value={values.contents}
               onChange={handleChange}
               input={<OutlinedInput label="作品" />}
               MenuProps={MenuProps}
-            >
-              {Array.from(contents).map(([code, content]) => (
-                <MenuItem
-                  key={code}
-                  value={code}
-                  style={getStyles(code, values.contents, theme)}
-                >
-                  {`${content.code}： ${content.name}`}
-                </MenuItem>
-              ))}
-            </Select>
+              items={items}
+              theme={theme}
+            />
           </FormControl>
         </Grid>
       </Grid>
