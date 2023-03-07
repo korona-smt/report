@@ -161,7 +161,7 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   stepContents.set(3, (<Confirm
     reportTypes={reportTypes}
     contents={contents}
-    institution={institutionsMap}
+    institutions={institutionsMap}
     values={formValues}
   />));
 

@@ -13,11 +13,11 @@ import { Values } from '../../../../../pages/chakuken/torihikisaki-shiharai';
 type Props = {
   reportTypes: Map<AggregateType, string>;
   contents: Contents;
-  institution: Institutions;
+  institutions: Institutions;
   values: Values;
 }
 
-export default function Confirm({ reportTypes, contents, institution, values }: Props) {
+export default function Confirm({ reportTypes, contents, institutions, values }: Props) {
   return (
     <Fragment>
       <Typography variant="h5">
@@ -28,8 +28,8 @@ export default function Confirm({ reportTypes, contents, institution, values }: 
           <Typography variant="h6">
             期間
           </Typography>
-          <Typography>{reportTypes.get(values.type)}</Typography>
-          <Typography>
+          <Typography data-testid={'values-type'}>{reportTypes.get(values.type)}</Typography>
+          <Typography data-testid={'values-date-range'}>
             { values.dateRangeFrom && format(values.dateRangeFrom, 'yyyy/MM/dd')} ～{' '}
             {format(values.dateRangeTo, 'yyyy/MM/dd')}
           </Typography>
@@ -38,7 +38,7 @@ export default function Confirm({ reportTypes, contents, institution, values }: 
           <Typography variant="h6">
             作品
           </Typography>
-          <List dense>
+          <List dense data-testid={'values-contents'}>
             {values.contents.map((code) => (
               <ListItem key={code}>
                 <ListItemText primary={contents.get(code)?.name} secondary={code}></ListItemText>
@@ -50,10 +50,10 @@ export default function Confirm({ reportTypes, contents, institution, values }: 
           <Typography variant="h6">
             店舗
           </Typography>
-          <List dense>
+          <List dense data-testid={'values-institutions'}>
             {values.institutions.map((code) => (
               <ListItem key={code}>
-                <ListItemText primary={institution.get(code)?.name} secondary={code}></ListItemText>
+                <ListItemText primary={institutions.get(code)?.name} secondary={code}></ListItemText>
               </ListItem>
             ))}
           </List>
