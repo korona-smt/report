@@ -13,9 +13,7 @@ const nonActionHandler = (_v: Values) => {};
 describe('SelectDateRangeForm コンポーネントのテスト', () => {
   describe('レイアウトについてのテスト', () => {
     test('見出し 期間選択 が含まれる', () => {
-      const values = factoryValues();
-
-      render(<SelectDateRangeForm values={values} onChangeValues={nonActionHandler} reportTypes={reportTypes} />);
+      renderSelectDateRangeForm();
       const heading = screen.getByRole('heading', {name: '期間選択'});
 
       expect(heading).toBeInTheDocument();
