@@ -10,10 +10,10 @@ import SelectDateRangeForm from '../../../components/pages/chakuken/torihikisaki
 import SelectInstitutionForm from '../../../components/pages/chakuken/torihikisaki-shiharai/index/selectInstitutionForm';
 import Stepper from '../../../components/pages/chakuken/torihikisaki-shiharai/index/stepper';
 import { AggregateType } from '../../../domain/chakukenTorihikisakiShiharai';
-import { Content, ContentCode, Contents } from '../../../domain/content';
+import { ContentCode, Contents } from '../../../domain/content';
 import { Institutions, Institution, InstitutionCode } from '../../../domain/institution';
-import type { Data as GetContentsResponseData } from '../../api/contents';
 import type { Data as PostTorishikisakiShiharaiResponseData } from '../../api/chakuken/torihikisaki-shiharai';
+import { fetchContents } from '../../../lib/api/contents';
 import * as db from '../../../lib/database/service';
 import InstitutionRepository from '../../../lib/database/institution/institutionRepository';
 import { InstitutionRepository as IInstitutionRepository } from '../../../domain/institution';
@@ -47,18 +47,6 @@ const steps: Map<StepNumber, string> = new Map([
   [2, '店舗選択'],
   [3, '確認'],
 ]);
-
-async function fetchContents(): Promise<Contents> {
-  return fetch('/api/contents')
-    .then((res) => res.json())
-    .then((data: GetContentsResponseData) => {
-      const contents: Contents = new Map();
-      data.contents.forEach((content: Content) => {
-        contents.set(content.code, content);
-      });
-      return contents;
-    });
-}
 
 async function fetchCreateReport(values: Values): Promise<PostTorishikisakiShiharaiResponseData> {
   return fetch('/api/chakuken/torihikisaki-shiharai', {
