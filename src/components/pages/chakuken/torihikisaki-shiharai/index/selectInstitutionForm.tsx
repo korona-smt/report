@@ -22,13 +22,13 @@ const MenuProps = {
   },
 };
 
-type Props = {
+export type SelectInstitutionFormProps = {
   institutions: Institutions;
   values: SelectInstitutionFormValues;
   onChangeValues: (values: SelectInstitutionFormValues) => void;
 }
 
-export default function SelectInstitutionForm({ institutions, values, onChangeValues }: Props) {
+export default function SelectInstitutionForm({ institutions, values, onChangeValues }: SelectInstitutionFormProps) {
   const theme = useTheme();
 
   type InstitutionsValues = typeof values.institutions;
