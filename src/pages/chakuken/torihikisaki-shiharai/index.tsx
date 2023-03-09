@@ -12,8 +12,8 @@ import Stepper from '../../../components/pages/chakuken/torihikisaki-shiharai/in
 import { AggregateType } from '../../../domain/chakukenTorihikisakiShiharai';
 import { ContentCode, Contents } from '../../../domain/content';
 import { Institutions, Institution, InstitutionCode } from '../../../domain/institution';
-import type { Data as PostTorishikisakiShiharaiResponseData } from '../../api/chakuken/torihikisaki-shiharai';
 import { fetchContents } from '../../../lib/api/contents';
+import { createChakukenTorihikisakiShiharaiReport } from '../../../lib/api/chakuken/torihikisakiShiharai';
 import * as db from '../../../lib/database/service';
 import InstitutionRepository from '../../../lib/database/institution/institutionRepository';
 import { InstitutionRepository as IInstitutionRepository } from '../../../domain/institution';
@@ -47,17 +47,6 @@ const steps: Map<StepNumber, string> = new Map([
   [2, '店舗選択'],
   [3, '確認'],
 ]);
-
-async function fetchCreateReport(values: Values): Promise<PostTorishikisakiShiharaiResponseData> {
-  return fetch('/api/chakuken/torihikisaki-shiharai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values),
-      })
-      .then(data => data.json());
-}
 
 type ServerSideProps = {
   institutions: Institution[];
@@ -157,8 +146,8 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   const [donwloadFile, setDonwloadFile] = useState<string>();
   const handlerDownload = async () => {
     setDownloading(true);
-    await fetchCreateReport(formValues)
-      .then((data: PostTorishikisakiShiharaiResponseData) => {
+    await createChakukenTorihikisakiShiharaiReport(formValues)
+      .then((data) => {
         setDonwloadFile(data.filename);
       })
       .catch((response) => {

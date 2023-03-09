@@ -4,26 +4,7 @@ import * as db from '../../../lib/database/service';
 import { ChakukenTorihikisakiShiharaiRepository as IChakukenTorihikisakiShiharaiRepository, Detail } from '../../../domain/chakukenTorihikisakiShiharai';
 import ChakukenTorihikisakiShiharaiRepository from '../../../lib/database/claimAttend/chakukenTorihikisakiShiharaiRepository';
 import * as report from '../../../lib/report/chakukenTorihikisakiShiharai';
-
-export type Data = {
-  filename: string;
-}
-
-type Error = {
-  message: string;
-}
-
-type ErrorData = {
-  error: Error;
-}
-
-type RequestParams = {
-  type: string;
-  dateRangeFrom: string | null; // 日付
-  dateRangeTo: string; // 日付
-  contents: string[]; // content_codeのリスト
-  institutions: string[]; // institution_codeのリスト
-}
+import { CreateReportReciveParams, CreateReportResponseData, ErrorResponseData } from '../../../lib/api/chakuken/torihikisakiShiharai';
 
 // @todo delete
 const dummy: Detail[] = [
@@ -33,13 +14,13 @@ const dummy: Detail[] = [
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | ErrorData>
+  res: NextApiResponse<CreateReportResponseData | ErrorResponseData>
 ) {
   if (req.method !== 'POST') {
     return res.status(404).json({ error: { message: '404 Not Found' } });
   }
 
-  const params: RequestParams = req.body;
+  const params: CreateReportReciveParams = req.body;
   console.log('params', params);
 
   // @todo パラメータをデータ取得に使用する
