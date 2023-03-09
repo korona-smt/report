@@ -143,13 +143,13 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   />));
 
   const [downloading, setDownloading] = useState<boolean>(false);
-  const [donwloadFile, setDonwloadFile] = useState<string>('');
+  const [downloadFile, setDownloadFile] = useState<string>('');
   const handlerDownload = async () => {
-    setDonwloadFile('');
+    setDownloadFile('');
     setDownloading(true);
     await createChakukenTorihikisakiShiharaiReport(formValues)
       .then((data) => {
-        setDonwloadFile(data.filename);
+        setDownloadFile(data.filename);
       })
       .catch((response) => {
         console.log('download error', response);
@@ -159,12 +159,12 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   }
 
   useEffect(() => {
-    if (donwloadFile !== '') {
+    if (downloadFile !== '') {
       // 非同期通信後にwindow.openするとポップアップブロックされるため、処理を分ける
-      window.open('/chakuken/torihikisaki-shiharai/download?filename=' + donwloadFile ,'_blank');
+      window.open('/chakuken/torihikisaki-shiharai/download?filename=' + downloadFile ,'_blank');
       setDownloading(false);
     }
-  }, [donwloadFile]);
+  }, [downloadFile]);
 
   return (
     <Layout title="着券取引支払先" current="chakuken-torihikisaki-shiharai">
