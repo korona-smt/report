@@ -22,13 +22,13 @@ const MenuProps = {
   },
 };
 
-type Props = {
+export type SelectContentFormProps = {
   contents: Contents;
   values: SelectContentFormValues;
   onChangeValues: (values: SelectContentFormValues) => void;
 }
 
-export default function SelectContentForm({ contents, values, onChangeValues }: Props) {
+export default function SelectContentForm({ contents, values, onChangeValues }: SelectContentFormProps) {
   const theme = useTheme();
 
   type ContentsValues = typeof values.contents;
