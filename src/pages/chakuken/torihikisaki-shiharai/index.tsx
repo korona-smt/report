@@ -143,8 +143,9 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   />));
 
   const [downloading, setDownloading] = useState<boolean>(false);
-  const [donwloadFile, setDonwloadFile] = useState<string>();
+  const [donwloadFile, setDonwloadFile] = useState<string>('');
   const handlerDownload = async () => {
+    setDonwloadFile('');
     setDownloading(true);
     await createChakukenTorihikisakiShiharaiReport(formValues)
       .then((data) => {
@@ -158,7 +159,7 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
   }
 
   useEffect(() => {
-    if (!!donwloadFile) {
+    if (donwloadFile !== '') {
       // 非同期通信後にwindow.openするとポップアップブロックされるため、処理を分ける
       window.open('/chakuken/torihikisaki-shiharai/download?filename=' + donwloadFile ,'_blank');
       setDownloading(false);
