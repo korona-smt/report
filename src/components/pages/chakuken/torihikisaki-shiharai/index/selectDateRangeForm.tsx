@@ -31,7 +31,8 @@ export default function SelectDateRangeForm({ reportTypes, values, onChangeValue
   };
 
   const handleFromChange = (newValue: Date | null) => {
-    onChangeValues({ ...values, dateRangeFrom: newValue });
+    // @todo 入力必須なのでブランクにできないようにしたい
+    onChangeValues({ ...values, dateRangeFrom: newValue ?? values.dateRangeFrom });
   };
 
   const handleToChange = (newValue: Date | null) => {
@@ -68,7 +69,7 @@ export default function SelectDateRangeForm({ reportTypes, values, onChangeValue
                 label="From"
                 value={values.dateRangeFrom}
                 onChange={handleFromChange}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params} required />}
               />
               <Box sx={{ mx: 2 }}> ～ </Box>
               <DatePicker

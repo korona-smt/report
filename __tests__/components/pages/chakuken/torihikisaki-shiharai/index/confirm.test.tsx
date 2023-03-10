@@ -40,17 +40,6 @@ describe('Confirm コンポーネントのテスト', () => {
 
       expect(el).toHaveTextContent('楽日');
     });
-    test('選択した期間 ～ 2023/03/04 が含まれる', () => {
-      const values = factoryValues({
-        dateRangeFrom: null,
-        dateRangeTo: new Date('2023/03/04'),
-      });
-
-      render(<Confirm values={values} {...defaultProps} />);
-      const el = screen.getByTestId('values-date-range');
-
-      expect(el).toHaveTextContent('～ 2023/03/04');
-    });
     test('選択した期間 2023/02/01 ～ 2023/03/04 が含まれる', () => {
       const values = factoryValues({
         dateRangeFrom: new Date('2023/02/01'),

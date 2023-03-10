@@ -30,7 +30,7 @@ export default function Confirm({ reportTypes, contents, institutions, values }:
           </Typography>
           <Typography data-testid={'values-type'}>{reportTypes.get(values.type)}</Typography>
           <Typography data-testid={'values-date-range'}>
-            { values.dateRangeFrom && format(values.dateRangeFrom, 'yyyy/MM/dd')} ～{' '}
+            {format(values.dateRangeFrom, 'yyyy/MM/dd')} ～{' '}
             {format(values.dateRangeTo, 'yyyy/MM/dd')}
           </Typography>
         </Grid>

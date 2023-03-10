@@ -17,6 +17,7 @@ import { createChakukenTorihikisakiShiharaiReport } from '../../../lib/api/chaku
 import * as db from '../../../lib/database/service';
 import InstitutionRepository from '../../../lib/database/institution/institutionRepository';
 import { InstitutionRepository as IInstitutionRepository } from '../../../domain/institution';
+import * as date from '../../../lib/date';
 
 const reportTypes = new Map<AggregateType, string>([
   [AggregateType.DATE_RANGE, '期間指定検索'],
@@ -25,7 +26,7 @@ const reportTypes = new Map<AggregateType, string>([
 
 export type SelectDateRangeFormValues = {
   type: AggregateType;
-  dateRangeFrom: Date | null; // nullは実質サービス導入日のような日付では？
+  dateRangeFrom: Date;
   dateRangeTo: Date;
 }
 export type SelectContentFormValues = {
@@ -50,6 +51,7 @@ const steps: Map<StepNumber, string> = new Map([
 
 type ServerSideProps = {
   institutions: Institution[];
+  serviceLaunchDateStr: string;
 };
 
 export async function getServerSideProps(): Promise<GetServerSidePropsResult<ServerSideProps>> {
@@ -58,9 +60,12 @@ export async function getServerSideProps(): Promise<GetServerSidePropsResult<Ser
   const repository: IInstitutionRepository = new InstitutionRepository(conn);
   const institutions = await repository.find({ projectId });
 
+  const serviceLaunchDate: Date = date.parseDate(process.env.SMT_SERVICE_LAUNCH_DATE ?? '');
+
   return {
     props: {
       institutions: Array.from(institutions).map(([_code, institution]) => institution),
+      serviceLaunchDateStr: date.formatDate(serviceLaunchDate),
     },
   };
 }
@@ -70,8 +75,9 @@ type Props = ServerSideProps;
 /**
  * 着券取引先支払
  */
-export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
+export default function ChakukenTorihikisakiShiharai({ institutions, serviceLaunchDateStr }: Props) {
   const institutionsMap: Institutions = new Map(institutions.map(i => [i.code, i]));
+  const sericeLaunchDate: Date = new Date(serviceLaunchDateStr);
 
   const [activeStep, setActiveStep] = useState<StepNumber>(0);
   const handleActiveStep = (newStep: number) => {
@@ -83,7 +89,7 @@ export default function ChakukenTorihikisakiShiharai({ institutions }: Props) {
 
   const [selectDateRangeFormValues, setSelectDateRangeFormValues] = useState<SelectDateRangeFormValues>({
     type: AggregateType.DATE_RANGE,
-    dateRangeFrom: null,
+    dateRangeFrom: sericeLaunchDate,
     dateRangeTo: new Date(),
   });
 
